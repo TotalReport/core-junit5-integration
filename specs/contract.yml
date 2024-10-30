@@ -1,0 +1,3023 @@
+{
+  "openapi": "3.0.2",
+  "paths": {
+    "/healthcheck": {
+      "get": {
+        "summary": "Get a health check status.",
+        "tags": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "apiStarted": {
+                      "type": "boolean"
+                    },
+                    "databaseAccessible": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "apiStarted",
+                    "databaseAccessible"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "apiStarted": {
+                      "type": "boolean"
+                    },
+                    "databaseAccessible": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "apiStarted",
+                    "databaseAccessible"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports": {
+      "post": {
+        "summary": "Create the report.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/{id}": {
+      "get": {
+        "summary": "Read the report by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the report by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/launches": {
+      "post": {
+        "summary": "Create the launch.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reportId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "reportId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reportId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "reportId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/launches/{id}": {
+      "get": {
+        "summary": "Read the launch by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reportId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "reportId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the launch fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reportId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "reportId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the launch by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test-contexts": {
+      "post": {
+        "summary": "Create the test context.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "launchId": {
+                    "type": "integer"
+                  },
+                  "parentTestContextId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "launchId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "parentTestContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test-contexts/{id}": {
+      "get": {
+        "summary": "Read the test context by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "parentTestContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the test context fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "parentTestContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the test context by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/before-tests": {
+      "post": {
+        "summary": "Create the before test.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "launchId": {
+                    "type": "integer"
+                  },
+                  "testContextId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "statusId": {
+                    "type": "string"
+                  },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "type",
+                        "value"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "launchId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/before-tests/{id}": {
+      "get": {
+        "summary": "Read the before test by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the before test fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "statusId": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the before test by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/before-test-steps": {
+      "post": {
+        "summary": "Create the before test step.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "beforeTestId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "isSuccessful": {
+                    "type": "boolean"
+                  },
+                  "errorMessage": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "beforeTestId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beforeTestId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "beforeTestId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/before-test-steps/{id}": {
+      "get": {
+        "summary": "Get the before test step by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beforeTestId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "beforeTestId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/before-tests-steps/{id}": {
+      "patch": {
+        "summary": "Patch the before test step fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "isSuccessful": {
+                    "type": "boolean",
+                    "nullable": true
+                  },
+                  "errorMessage": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "beforeTestId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "beforeTestId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the before test step by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tests": {
+      "post": {
+        "summary": "Create the test.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "launchId": {
+                    "type": "integer"
+                  },
+                  "testContextId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "statusId": {
+                    "type": "string"
+                  },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "type",
+                        "value"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "launchId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tests/{id}": {
+      "get": {
+        "summary": "Read the test by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the test fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "statusId": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the test by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test-steps": {
+      "post": {
+        "summary": "Create the test step.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "testId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "isSuccessful": {
+                    "type": "boolean"
+                  },
+                  "errorMessage": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "testId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "testId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "testId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/test-steps/{id}": {
+      "get": {
+        "summary": "Get the test step by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "testId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "testId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the test step fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "isSuccessful": {
+                    "type": "boolean",
+                    "nullable": true
+                  },
+                  "errorMessage": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "testId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "testId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the test step by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/after-tests": {
+      "post": {
+        "summary": "Create the after test.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "launchId": {
+                    "type": "integer"
+                  },
+                  "testContextId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "statusId": {
+                    "type": "string"
+                  },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "nullable": true
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "type",
+                        "value"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "launchId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/after-tests/{id}": {
+      "get": {
+        "summary": "Read the after test by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the after test fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "statusId": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "launchId": {
+                      "type": "integer"
+                    },
+                    "testContextId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 256
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "statusId": {
+                      "type": "string"
+                    },
+                    "argumentsHash": {
+                      "type": "string"
+                    },
+                    "arguments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string",
+                            "nullable": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "type",
+                          "value"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "launchId",
+                    "id",
+                    "title",
+                    "createdTimestamp"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the after test by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/after-test-steps": {
+      "post": {
+        "summary": "Create the after test step.",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "afterTestId": {
+                    "type": "integer"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "isSuccessful": {
+                    "type": "boolean"
+                  },
+                  "errorMessage": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "afterTestId",
+                  "title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "afterTestId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "afterTestId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/after-test-steps/{id}": {
+      "get": {
+        "summary": "Get the after test step by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "afterTestId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "afterTestId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Patch the after test step fields.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "createdTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "startedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "finishedTimestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true
+                  },
+                  "isSuccessful": {
+                    "type": "boolean",
+                    "nullable": true
+                  },
+                  "errorMessage": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "afterTestId": {
+                      "type": "integer"
+                    },
+                    "id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "createdTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "startedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "finishedTimestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "isSuccessful": {
+                      "type": "boolean"
+                    },
+                    "errorMessage": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "afterTestId",
+                    "id",
+                    "title"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete the after test step by ID.",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "204"
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "Total report API",
+    "version": "1.0.0"
+  }
+}
