@@ -72,16 +72,15 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
             this.launchId = Integer.parseInt(launchIdFromProperty);
         }
 
-        log.info("Total report extension initialized with report ID {} and launch ID {}", reportId, launchId);
+        log.trace("Total report extension initialized with report ID {} and launch ID {}", reportId, launchId);
     }
-
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        log.info("Context root unique ID: {}", context.getRoot().getUniqueId());
-        log.info("Context unique ID: {}", context.getUniqueId());
+        log.trace("Context root unique ID: {}", context.getRoot().getUniqueId());
+        log.trace("Context unique ID: {}", context.getUniqueId());
 
-        log.info("Before all tests {}, {}, {}, {}", context.getTestClass(), context.getTestMethod(), context.getElement(),
+        log.trace("Before all tests {}, {}, {}, {}", context.getTestClass(), context.getTestMethod(), context.getElement(),
                 context.getParent());
         OffsetDateTime timestamp = OffsetDateTime.now();
 
@@ -98,7 +97,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void interceptBeforeAllMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting before all method {}, {}, {}", invocation, invocationContext.getExecutable(), extensionContext);
+        log.trace("Intercepting before all method {}, {}, {}", invocation, invocationContext.getExecutable(), extensionContext);
 //        beforeAllTestStarted(invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
         OffsetDateTime timestamp = OffsetDateTime.now();
@@ -125,7 +124,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void handleBeforeAllMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        log.info("Handling before all method execution exception");
+        log.trace("Handling before all method execution exception");
         // FIXME In theory somebody can override this method in different extension to handle exceptions.
         //  In this case the exception will be sent to Total Report in {@link TotalReportExtension#interceptBeforeAllMethod},
         //  but handled here to change it or remove. As a result can be inconsistency between sent status and status after handle.
@@ -138,35 +137,35 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
     public void preConstructTestInstance(TestInstanceFactoryContext factoryContext, ExtensionContext context) throws Exception {
 //        OffsetDateTime beforeAllFinishTime = OffsetDateTime.now();
 
-        log.info("Test instance pre-construct: {}", factoryContext.getTestClass());
+        log.trace("Test instance pre-construct: {}", factoryContext.getTestClass());
 
 //        TotalReportManager.allBeforeAllFinished(context.getTestClass().get(), beforeAllFinishTime, DefaultTestStatuses.SUCCESSFUL);
     }
 
     @Override
     public <T> T interceptTestClassConstructor(Invocation<T> invocation, ReflectiveInvocationContext<Constructor<T>> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting test class constructor");
+        log.trace("Intercepting test class constructor");
 
         return InvocationInterceptor.super.interceptTestClassConstructor(invocation, invocationContext, extensionContext);
     }
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext context) throws Exception {
-        log.info("Test instance post-processor: {}", testInstance);
+        log.trace("Test instance post-processor: {}", testInstance);
     }
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        log.info("Context root unique ID: {}", context.getRoot().getUniqueId());
+        log.trace("Context root unique ID: {}", context.getRoot().getUniqueId());
 
-        log.info("Context unique ID: {}", context.getUniqueId());
+        log.trace("Context unique ID: {}", context.getUniqueId());
 
-        log.info("Before each test: {}", context.getTestMethod());
+        log.trace("Before each test: {}", context.getTestMethod());
     }
 
     @Override
     public void interceptBeforeEachMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting before each method");
+        log.trace("Intercepting before each method");
 
 //        beforeEachStarted(Thread.currentThread(), invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
@@ -195,7 +194,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void handleBeforeEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        log.info("Handling before each method execution exception");
+        log.trace("Handling before each method execution exception");
 
 //        TotalReportManager.beforeEachFailed(Thread.currentThread(), context.getTestClass().get(), throwable);
 
@@ -204,18 +203,18 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void beforeTestExecution(ExtensionContext context) throws Exception {
-        log.info("Context root unique ID: {}", context.getRoot().getUniqueId());
-        log.info("Context unique ID: {}", context.getUniqueId());
+        log.trace("Context root unique ID: {}", context.getRoot().getUniqueId());
+        log.trace("Context unique ID: {}", context.getUniqueId());
 //        OffsetDateTime beforeEachFinishTimestamp = OffsetDateTime.now();
 
-        log.info("Before test execution: {}", context.getTestMethod());
+        log.trace("Before test execution: {}", context.getTestMethod());
 
 //        TotalReportManager.beforeEachFinished(Thread.currentThread(), context.getTestClass().get(), beforeEachFinishTimestamp, DefaultTestStatuses.SUCCESSFUL);
     }
 
     @Override
     public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting test method");
+        log.trace("Intercepting test method");
 
 //        TotalReportManager.testStarted(Thread.currentThread(), invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
@@ -246,12 +245,12 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        log.info("After test execution: {}", context.getTestMethod());
+        log.trace("After test execution: {}", context.getTestMethod());
     }
 
     @Override
     public void interceptAfterEachMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting after each method");
+        log.trace("Intercepting after each method");
 
         OffsetDateTime timestamp = OffsetDateTime.now();
         String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
@@ -282,12 +281,12 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
-        log.info("After each test: {}", context.getTestMethod());
+        log.trace("After each test: {}", context.getTestMethod());
     }
 
     @Override
     public void handleAfterEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        log.info("Handling after each method execution exception");
+        log.trace("Handling after each method execution exception");
 
 //        TotalReportManager.afterEachFailed(Thread.currentThread(), context.getTestClass().get(), throwable);
 
@@ -296,12 +295,12 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void preDestroyTestInstance(ExtensionContext context) throws Exception {
-        log.info("Pre-destroy test instance: {}", context.getTestClass());
+        log.trace("Pre-destroy test instance: {}", context.getTestClass());
     }
 
     @Override
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
-        log.info("Test disabled: {}", context.getTestMethod());
+        log.trace("Test disabled: {}", context.getTestMethod());
 
 //        TotalReportManager.testFinished(Thread.currentThread(), context.getTestClass().get(), context.getTestMethod().get(),
 //                DefaultTestStatuses.SKIPPED);
@@ -311,7 +310,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void testSuccessful(ExtensionContext context) {
-        log.info("Test successful: {}", context.getTestMethod());
+        log.trace("Test successful: {}", context.getTestMethod());
 
 //        TotalReportManager.testFinished(Thread.currentThread(), context.getTestClass().get(), context.getTestMethod().get(),
 //                DefaultTestStatuses.SUCCESSFUL);
@@ -321,7 +320,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void testAborted(ExtensionContext context, Throwable cause) {
-        log.info("Test aborted: {}", context.getTestMethod());
+        log.trace("Test aborted: {}", context.getTestMethod());
 
 //        TotalReportManager.testFinished(Thread.currentThread(), context.getTestClass().get(), context.getTestMethod().get(),
 //                DefaultTestStatuses.ABORTED);
@@ -339,12 +338,12 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 //                    DefaultTestStatuses.AUTOMATION_BUG);
 //        }
         TestWatcher.super.testFailed(context, cause);
-        log.info("Test failed: {}", context.getTestMethod());
+        log.trace("Test failed: {}", context.getTestMethod());
     }
 
     @Override
     public void interceptAfterAllMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting after all method");
+        log.trace("Intercepting after all method");
 
         OffsetDateTime timestamp = OffsetDateTime.now();
         String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
@@ -374,7 +373,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
     @Override
     public void handleAfterAllMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        log.info("Handling after all method execution exception {} {}", context.getTestClass().get(), context.getTestMethod());
+        log.trace("Handling after all method execution exception {} {}", context.getTestClass().get(), context.getTestMethod());
 
 //        TotalReportManager.afterAllFailed(context.getTestClass().get(), throwable);
         LifecycleMethodExecutionExceptionHandler.super.handleAfterAllMethodExecutionException(context, throwable);
@@ -389,32 +388,32 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
         agent.contextFinished(testContextId, OffsetDateTime.now());
 
 //        TotalReportManager.testContextFinished(context.getTestClass().get());
-        log.info("After all tests {}, {}, {}, {}", context.getTestClass(), context.getTestMethod(), context.getElement(),
+        log.trace("After all tests {}, {}, {}, {}", context.getTestClass(), context.getTestMethod(), context.getElement(),
                 context.getParent());
     }
 
 
     @Override
     public <T> T interceptTestFactoryMethod(Invocation<T> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting test factory method");
+        log.trace("Intercepting test factory method");
         return InvocationInterceptor.super.interceptTestFactoryMethod(invocation, invocationContext, extensionContext);
     }
 
     @Override
     public void interceptTestTemplateMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting test template method");
+        log.trace("Intercepting test template method");
         InvocationInterceptor.super.interceptTestTemplateMethod(invocation, invocationContext, extensionContext);
     }
 
     @Override
     public void interceptDynamicTest(Invocation<Void> invocation, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting dynamic test");
+        log.trace("Intercepting dynamic test");
         InvocationInterceptor.super.interceptDynamicTest(invocation, extensionContext);
     }
 
     @Override
     public void interceptDynamicTest(Invocation<Void> invocation, DynamicTestInvocationContext invocationContext, ExtensionContext extensionContext) throws Throwable {
-        log.info("Intercepting dynamic test");
+        log.trace("Intercepting dynamic test");
         InvocationInterceptor.super.interceptDynamicTest(invocation, invocationContext, extensionContext);
     }
 
@@ -423,6 +422,6 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
      */
     @Override
     public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        log.info("Handling test execution exception");
+        log.trace("Handling test execution exception");
     }
 }
