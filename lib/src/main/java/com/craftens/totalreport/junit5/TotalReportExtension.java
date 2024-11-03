@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-public class TotalReportExtension implements LifecycleMethodExecutionExceptionHandler, TestExecutionExceptionHandler, InvocationInterceptor, TestInstancePreDestroyCallback, TestWatcher, AfterEachCallback, BeforeEachCallback, AfterTestExecutionCallback, BeforeTestExecutionCallback, BeforeAllCallback, AfterAllCallback, TestInstancePreConstructCallback, TestInstancePostProcessor {
+public class TotalReportExtension implements LifecycleMethodExecutionExceptionHandler, InvocationInterceptor, TestInstancePreDestroyCallback, TestWatcher, AfterEachCallback, BeforeEachCallback, AfterTestExecutionCallback, BeforeTestExecutionCallback, BeforeAllCallback, AfterAllCallback, TestInstancePreConstructCallback, TestInstancePostProcessor/* , TestExecutionExceptionHandler */ {
     private final TotalReportAgent agent;
     private final Integer reportId;
     private final Integer launchId;
@@ -239,8 +239,6 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
         agent.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
 
-
-//        InvocationInterceptor.super.interceptTestMethod(invocation, invocationContext, extensionContext);
     }
 
     @Override
@@ -417,11 +415,11 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
         InvocationInterceptor.super.interceptDynamicTest(invocation, invocationContext, extensionContext);
     }
 
-    /**
-     * Handled in {@link TotalReportExtension#testFailed}.
-     */
-    @Override
-    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        log.trace("Handling test execution exception");
-    }
+//    /**
+//     * Handled in {@link TotalReportExtension#testFailed}.
+//     */
+//    @Override
+//    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+//        log.trace("Handling test execution exception");
+//    }
 }
