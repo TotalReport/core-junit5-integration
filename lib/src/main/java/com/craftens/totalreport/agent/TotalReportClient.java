@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
  * The agent for the Total Report server.
  */
 @Slf4j
-public class TotalReportAgent {
+public class TotalReportClient {
     /**
      * The URL of the Total Report server.
      */
@@ -27,7 +27,7 @@ public class TotalReportAgent {
      *
      * @param url The URL of the Total Report server.
      */
-    public TotalReportAgent(String url) {
+    public TotalReportClient(String url) {
         this.url = url;
         ApiClient defaultClient = Configuration.getDefaultApiClient().setBasePath(this.url);
         apiInstance = new DefaultApi(defaultClient);
@@ -224,5 +224,29 @@ public class TotalReportAgent {
                         .finishedTimestamp(finishedTimestamp));
 
         log.debug("Test context [ {} | {} ] finished.", response.getId(), response.getTitle());
+    }
+
+    /**
+     * Send information to Total Report server about skipped test.
+     *
+     * @param launchId The ID of the launch.
+     * @param testContextId The ID of the test context.
+     * @param title The title of the test.
+     * @param timestamp The timestamp of the test (created, started, finished).
+     * @return The ID of the created test.
+     */
+    public Integer testSkipped(Integer launchId, Integer testContextId, String title, OffsetDateTime timestamp){
+        V1BeforeTestsPost201Response response = apiInstance.v1TestsPost(new V1BeforeTestsPostRequest()
+                .launchId(launchId)
+                .testContextId(testContextId)
+                .title(title)
+                .createdTimestamp(timestamp)
+                .startedTimestamp(timestamp)
+                .finishedTimestamp(timestamp)
+                .statusId(DefaultTestStatuses.SKIPPED));
+
+        log.debug("Test [ {} | {} ] skipped.", response.getId(), response.getTitle());
+
+        return response.getId();
     }
 }

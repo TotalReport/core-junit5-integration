@@ -1,7 +1,7 @@
 package com.craftens.totalreport.junit5;
 
 import com.craftens.totalreport.agent.DefaultTestStatuses;
-import com.craftens.totalreport.agent.TotalReportAgent;
+import com.craftens.totalreport.agent.TotalReportClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.InvocationInterceptor;
 import org.junit.jupiter.api.extension.LifecycleMethodExecutionExceptionHandler;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
-import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.junit.jupiter.api.extension.TestInstanceFactoryContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.jupiter.api.extension.TestInstancePreConstructCallback;
@@ -29,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class TotalReportExtension implements LifecycleMethodExecutionExceptionHandler, InvocationInterceptor, TestInstancePreDestroyCallback, TestWatcher, AfterEachCallback, BeforeEachCallback, AfterTestExecutionCallback, BeforeTestExecutionCallback, BeforeAllCallback, AfterAllCallback, TestInstancePreConstructCallback, TestInstancePostProcessor/* , TestExecutionExceptionHandler */ {
-    private final TotalReportAgent agent;
+    private final TotalReportClient client;
     private final Integer reportId;
     private final Integer launchId;
     private final ConcurrentHashMap<Class<?>, Integer> testContexts = new ConcurrentHashMap<>();
@@ -40,7 +39,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
             throw new IllegalArgumentException("Total Report URL is not set. Set the property " + PropertiesNames.TOTAL_REPORT_URL);
         }
 
-        agent = new TotalReportAgent(totalReportUrl);
+        client = new TotalReportClient(totalReportUrl);
 
         // FIXME {@link TotalReportExtension} can have multiple instances,
         //  but the report and launch IDs should be the same for all instances
@@ -51,7 +50,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
                 throw new IllegalArgumentException("Neither Report ID nor Report title are not set. Set the property " +
                         PropertiesNames.REPORT_ID + " or " + PropertiesNames.REPORT_TITLE);
             }
-            this.reportId = agent.createReport(reportTitleFromProperty);
+            this.reportId = client.createReport(reportTitleFromProperty);
         } else {
             this.reportId = Integer.parseInt(reportIdFromProperty);
         }
@@ -67,7 +66,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
             OffsetDateTime timestamp = OffsetDateTime.now();
 
-            launchId = agent.launchCreatedAndStarted(this.reportId, launchTitleFromProperty, timestamp, timestamp);
+            launchId = client.launchCreatedAndStarted(this.reportId, launchTitleFromProperty, timestamp, timestamp);
         } else {
             this.launchId = Integer.parseInt(launchIdFromProperty);
         }
@@ -88,7 +87,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
         String testContextName = testContextClass.getName();
 
 
-        Integer tesContextId = agent.contextCreatedAndStarted(launchId, testContextName, timestamp, timestamp);
+        Integer tesContextId = client.contextCreatedAndStarted(launchId, testContextName, timestamp, timestamp);
 
         testContexts.put(testContextClass, tesContextId);
 
@@ -101,25 +100,25 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 //        beforeAllTestStarted(invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
         OffsetDateTime timestamp = OffsetDateTime.now();
-        String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
+        String name = getEntityTitle(invocationContext);
         Integer testContextId = testContexts.get(invocationContext.getExecutable().getDeclaringClass());
-        Integer beforeAllId = agent.beforeTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
+        Integer beforeAllId = client.beforeTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
 
         try {
             InvocationInterceptor.super.interceptBeforeAllMethod(invocation, invocationContext, extensionContext);
         } catch (Throwable throwable) {
             OffsetDateTime finishedTimestamp = OffsetDateTime.now();
             if (throwable instanceof AssertionError) {
-                agent.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
+                client.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
             } else {
-                agent.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
+                client.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
             }
             throw throwable;
         }
 
         OffsetDateTime finishedTimestamp = OffsetDateTime.now();
 
-        agent.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
+        client.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
     }
 
     @Override
@@ -170,26 +169,26 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 //        beforeEachStarted(Thread.currentThread(), invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
         OffsetDateTime timestamp = OffsetDateTime.now();
-        String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
+        String name = getEntityTitle(invocationContext);
         Integer testContextId = testContexts.get(invocationContext.getExecutable().getDeclaringClass());
 
-        Integer beforeAllId = agent.beforeTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
+        Integer beforeAllId = client.beforeTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
 
         try {
             InvocationInterceptor.super.interceptBeforeEachMethod(invocation, invocationContext, extensionContext);
         } catch (Throwable throwable) {
             OffsetDateTime finishedTimestamp = OffsetDateTime.now();
             if (throwable instanceof AssertionError) {
-                agent.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
+                client.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
             } else {
-                agent.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
+                client.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
             }
             throw throwable;
         }
 
         OffsetDateTime finishedTimestamp = OffsetDateTime.now();
 
-        agent.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
+        client.beforeTestFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
     }
 
     @Override
@@ -219,25 +218,25 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 //        TotalReportManager.testStarted(Thread.currentThread(), invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
         OffsetDateTime timestamp = OffsetDateTime.now();
-        String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
+        String name = getEntityTitle(invocationContext);
         Integer testContextId = testContexts.get(invocationContext.getExecutable().getDeclaringClass());
-        Integer beforeAllId = agent.testCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
+        Integer beforeAllId = client.testCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
 
         try {
             InvocationInterceptor.super.interceptTestMethod(invocation, invocationContext, extensionContext);
         } catch (Throwable throwable) {
             OffsetDateTime finishedTimestamp = OffsetDateTime.now();
             if (throwable instanceof AssertionError) {
-                agent.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
+                client.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
             } else {
-                agent.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
+                client.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
             }
             throw throwable;
         }
 
         OffsetDateTime finishedTimestamp = OffsetDateTime.now();
 
-        agent.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
+        client.testFinished(beforeAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
 
     }
 
@@ -251,26 +250,26 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
         log.trace("Intercepting after each method");
 
         OffsetDateTime timestamp = OffsetDateTime.now();
-        String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
+        String name = getEntityTitle(invocationContext);
         Integer testContextId = testContexts.get(invocationContext.getExecutable().getDeclaringClass());
 
-        Integer afterEachId = agent.afterTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
+        Integer afterEachId = client.afterTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
 
         try {
             InvocationInterceptor.super.interceptAfterEachMethod(invocation, invocationContext, extensionContext);
         } catch (Throwable throwable) {
             OffsetDateTime finishedTimestamp = OffsetDateTime.now();
             if (throwable instanceof AssertionError) {
-                agent.afterTestFinished(afterEachId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
+                client.afterTestFinished(afterEachId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
             } else {
-                agent.afterTestFinished(afterEachId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
+                client.afterTestFinished(afterEachId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
             }
             throw throwable;
         }
 
         OffsetDateTime finishedTimestamp = OffsetDateTime.now();
 
-        agent.afterTestFinished(afterEachId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
+        client.afterTestFinished(afterEachId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
 
 //        TotalReportManager.afterEachStarted(Thread.currentThread(), invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 
@@ -300,8 +299,10 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
     public void testDisabled(ExtensionContext context, Optional<String> reason) {
         log.trace("Test disabled: {}", context.getTestMethod());
 
-//        TotalReportManager.testFinished(Thread.currentThread(), context.getTestClass().get(), context.getTestMethod().get(),
-//                DefaultTestStatuses.SKIPPED);
+        OffsetDateTime timestamp = OffsetDateTime.now();
+        Integer testContextId = testContexts.get(context.getTestClass().get());
+        String name = getEntityTitle(context);
+        client.testSkipped(launchId, testContextId, name, timestamp);
 
         TestWatcher.super.testDisabled(context, reason);
     }
@@ -344,26 +345,26 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
         log.trace("Intercepting after all method");
 
         OffsetDateTime timestamp = OffsetDateTime.now();
-        String name = invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
+        String name = getEntityTitle(invocationContext);
         Integer testContextId = testContexts.get(invocationContext.getExecutable().getDeclaringClass());
 
-        Integer afterAllId = agent.afterTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
+        Integer afterAllId = client.afterTestCreatedAndStarted(launchId, testContextId, name, timestamp, timestamp);
 
         try {
             InvocationInterceptor.super.interceptAfterAllMethod(invocation, invocationContext, extensionContext);
         } catch (Throwable throwable) {
             OffsetDateTime finishedTimestamp = OffsetDateTime.now();
             if (throwable instanceof AssertionError) {
-                agent.afterTestFinished(afterAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
+                client.afterTestFinished(afterAllId, finishedTimestamp, DefaultTestStatuses.PRODUCT_BUG);
             } else {
-                agent.afterTestFinished(afterAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
+                client.afterTestFinished(afterAllId, finishedTimestamp, DefaultTestStatuses.AUTOMATION_BUG);
             }
             throw throwable;
         }
 
         OffsetDateTime finishedTimestamp = OffsetDateTime.now();
 
-        agent.afterTestFinished(afterAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
+        client.afterTestFinished(afterAllId, finishedTimestamp, DefaultTestStatuses.SUCCESSFUL);
 
 //        TotalReportManager.afterAllStarted(invocationContext.getExecutable().getDeclaringClass(), invocationContext.getExecutable());
 //        InvocationInterceptor.super.interceptAfterAllMethod(invocation, invocationContext, extensionContext);
@@ -383,7 +384,7 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 
         Integer testContextId = testContexts.get(context.getTestClass().get());
 
-        agent.contextFinished(testContextId, OffsetDateTime.now());
+        client.contextFinished(testContextId, OffsetDateTime.now());
 
 //        TotalReportManager.testContextFinished(context.getTestClass().get());
         log.trace("After all tests {}, {}, {}, {}", context.getTestClass(), context.getTestMethod(), context.getElement(),
@@ -422,4 +423,12 @@ public class TotalReportExtension implements LifecycleMethodExecutionExceptionHa
 //    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
 //        log.trace("Handling test execution exception");
 //    }
+
+    private static String getEntityTitle(ReflectiveInvocationContext<Method> invocationContext) {
+        return invocationContext.getExecutable().getDeclaringClass().getName() + "#" + invocationContext.getExecutable().getName();
+    }
+
+    private static String getEntityTitle(ExtensionContext extensionContext) {
+        return extensionContext.getTestClass().get().getName() + "#" + extensionContext.getTestMethod().get().getName();
+    }
 }
