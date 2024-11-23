@@ -1,4 +1,4 @@
-package com.craftens.totalreport.agent;
+package com.craftens.totalreport.client;
 
 /**
  * Default statuses for test results.

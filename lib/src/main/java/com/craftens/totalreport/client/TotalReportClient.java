@@ -1,4 +1,4 @@
-package com.craftens.totalreport.agent;
+package com.craftens.totalreport.client;
 
 import com.craftens.totalreport.openapi.api.DefaultApi;
 import com.craftens.totalreport.openapi.invoker.ApiClient;
